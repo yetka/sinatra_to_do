@@ -2,6 +2,7 @@ require("rspec")
 require("pg")
 require("task")
 require("spec_helper")
+require("list")
 
 DB = PG.connect({:dbname => 'to_do_test'})
 
@@ -12,6 +13,7 @@ RSpec.configure do |config|
 end
 
 describe(Task) do
+
   describe(".all") do
     it("is empty at first") do
       expect(Task.all()).to(eq([]))
@@ -47,4 +49,5 @@ describe(Task) do
       expect(task1).to(eq(task2))
     end
   end
+
 end
