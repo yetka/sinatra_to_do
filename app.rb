@@ -1,12 +1,12 @@
 require("sinatra")
 require("sinatra/reloader")
 also_reload("lib/**/*.rb")
+require("sinatra/activerecord")
 require("./lib/task")
 require("./lib/list")
 require("pg")
 
 
-DB = PG.connect({:dbname => "to_do"})
 
 get("/") do
   @lists = List.all()
@@ -51,5 +51,18 @@ delete("/lists/:id") do
   @list = List.find(params.fetch("id").to_i())
   @list.delete()
   @lists = List.all()
+  erb(:index)
+end
+
+get('/tasks/:id/edit') do
+  @task = Task.find(params.fetch("id").to_i())
+  erb(:task_edit)
+end
+
+patch("/tasks/:id") do
+  description = params.fetch("description")
+  @task = Task.find(params.fetch("id").to_i())
+  @task.update({:description => description})
+  @tasks = Task.all()
   erb(:index)
 end
